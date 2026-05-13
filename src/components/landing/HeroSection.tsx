@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 
 const HeroSection = () => {
   return (
-    <section className="max-w-3xl mx-auto px-6 py-14 text-center">
+    <section className="max-w-3xl mx-auto px-6 py-8 mb-12 text-center">
       <div className="inline-block bg-primary/10 text-primary text-xs font-medium px-3 py-1 rounded-full mb-6">
         AI-powered resume review
       </div>

@@ -6,9 +6,10 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { loginService } from "@/services/auth.service";
+import { googleAuthService, loginService } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
 import useAuthStore from "@/store/auth.store";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -75,6 +76,27 @@ const LoginForm = () => {
     }
   };
 
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const data = await googleAuthService(tokenResponse.access_token);
+        setAuth(data.user, data.accessToken, data.refreshToken);
+        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("refreshToken", data.refreshToken);
+        router.push("/dashboard");
+      } catch (err) {
+        const error = err as { response?: { data?: { message?: string } } };
+        setError(
+          error.response?.data?.message ||
+            "Something went wrong. Please try again.",
+        );
+      }
+    },
+    onError: () => {
+      setError("Google login failed. Please try again.");
+    },
+  });
+
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-muted/40 px-4">
       <Card className="w-full max-w-md flex flex-col">
@@ -86,7 +108,12 @@ const LoginForm = () => {
           </p>
         </CardHeader>
         <CardContent className="bg-card rounded-xl">
-          <Button variant="outline" className="w-full py-4 mb-4" type="button">
+          <Button
+            variant="outline"
+            className="w-full py-4 mb-4"
+            type="button"
+            onClick={() => handleGoogleLogin()}
+          >
             <svg className="w-5 h-5 mr-2" viewBox="0 0 16 16" fill="none">
               <path
                 d="M15.68 8.18c0-.57-.05-1.11-.14-1.64H8v3.1h4.3a3.67 3.67 0 01-1.59 2.41v2h2.57c1.5-1.38 2.4-3.42 2.4-5.87z"
