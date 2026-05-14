@@ -12,7 +12,7 @@ const features = [
 
 const FeaturesSection = () => {
   return (
-    <section id="features" className="max-w-3xl mx-auto px-6 pb-16">
+    <section id="features" className="max-w-5xl mx-auto px-6 pb-16">
       <p className="text-xs text-primary font-medium uppercase tracking-widest mb-2">
         Features
       </p>

@@ -18,7 +18,7 @@ const steps = [
 
 const HowItWorksSection = () => {
   return (
-    <section id="how-it-works" className="max-w-3xl mx-auto px-6 pb-16">
+    <section id="how-it-works" className="max-w-5xl mx-auto px-6 pb-16">
       <p className="text-xs text-primary font-medium uppercase tracking-widest mb-2">
         How it works
       </p>

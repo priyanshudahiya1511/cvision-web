@@ -13,11 +13,15 @@ const Navbar = () => {
 
   return (
     <nav className="w-full border-b border-border bg-background px-6 py-4">
-      <div className="max-w-5xl mx-auto flex items-center justify-between">
-        <Link href="/">
-          <h1 className="text-2xl font-bold text-primary">CVision</h1>
-        </Link>
+      <div className="max-w-5xl mx-auto flex items-center">
+        {/* Left */}
+        <div className="flex-1">
+          <Link href="/">
+            <h1 className="text-2xl font-bold text-primary">CVision</h1>
+          </Link>
+        </div>
 
+        {/* Middle */}
         <div className="hidden md:flex items-center gap-6">
           <Link
             href="#features"
@@ -33,7 +37,8 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <div className="flex items-center gap-3">
+        {/* Right */}
+        <div className="flex-1 flex items-center justify-end gap-3">
           <ThemeToggle />
           {isAuthenticated ? (
             <Button onClick={() => router.push("/dashboard")}>Dashboard</Button>
