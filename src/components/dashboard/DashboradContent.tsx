@@ -20,7 +20,7 @@ interface Resume {
 }
 
 const DashboardContent = () => {
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, hasHydrated } = useAuthStore();
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -44,13 +44,15 @@ const DashboardContent = () => {
   };
 
   useEffect(() => {
+    if (!hasHydrated) return;
+
     if (!isAuthenticated) {
       router.push("/login");
       return;
     }
 
     fetchResumes();
-  }, [isAuthenticated, router]);
+  }, [hasHydrated, isAuthenticated, router]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -106,6 +108,17 @@ const DashboardContent = () => {
     if (diff < 7) return `${diff} days ago`;
     return date.toLocaleDateString();
   };
+
+  if (!hasHydrated) {
+    return (
+      <div className="min-h-screen bg-muted/40">
+        <DashboradNavbar />
+        <div className="flex justify-center py-24">
+          <Loader2 className="w-6 h-6 text-primary animate-spin" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-muted/40">
