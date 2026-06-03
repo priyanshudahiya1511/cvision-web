@@ -27,13 +27,13 @@ interface Analysis {
 interface Resume {
   _id: string;
   originalFileName: string;
-  isAnalyzed: boolean;
+  isAnalysed: boolean;
   createdAt: string;
 }
 
 const AnalysisContent = ({ resumeId }: { resumeId: string }) => {
   const router = useRouter();
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, hasHydrated } = useAuthStore();
 
   const [resume, setResume] = useState<Resume | null>(null);
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
@@ -58,12 +58,15 @@ const AnalysisContent = ({ resumeId }: { resumeId: string }) => {
   };
 
   useEffect(() => {
+    if (!hasHydrated) return;
+
     if (!isAuthenticated) {
       router.push("/login");
       return;
     }
     fetchData();
-  }, [isAuthenticated]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated, isAuthenticated, resumeId]);
 
   const handleAnalyze = async () => {
     setIsAnalyzing(true);
@@ -97,7 +100,7 @@ const AnalysisContent = ({ resumeId }: { resumeId: string }) => {
     return "Poor — significant changes needed";
   };
 
-  if (isLoading) {
+  if (!hasHydrated || isLoading) {
     return (
       <div className="min-h-screen bg-muted/40">
         <DashboardNavbar />
